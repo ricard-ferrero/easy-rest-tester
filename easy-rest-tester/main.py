@@ -1,4 +1,4 @@
-import requests
+import api
 import ui
 
 def main():

@@ -13,8 +13,6 @@ RequestFrame = Frame(root)
 RequestFrame.pack(side=LEFT)
 Label(RequestFrame, text='Request').pack()
 
-countryvar = StringVar()
-country = ttk.Combobox(RequestFrame, textvariable=countryvar).pack()
 
 
 # Response Frame -> all the data from the response.
