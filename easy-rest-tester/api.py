@@ -11,13 +11,13 @@ class API():
 		self.json = None
 
 		self.REQUESTS = {
-		'GET': requests.get,
-		'OPTIONS': requests.options,
-		'HEAD': requests.head,
-		'POST': requests.post,
-		'PUT': requests.put,
-		'PATCH': requests.patch,
-		'DELETE': requests.delete,
+			'GET': requests.get,
+			'OPTIONS': requests.options,
+			'HEAD': requests.head,
+			'POST': requests.post,
+			'PUT': requests.put,
+			'PATCH': requests.patch,
+			'DELETE': requests.delete,
 		}
 
 	def set_method(self, method):
@@ -43,3 +43,6 @@ class API():
 			return 'Error: method requests incompatible.'
 
 		return self.REQUESTS[self.method](self.url, params=self.params, data=self.data, json=self.json, **kwargs)
+
+	def cosadexa(self):
+		print('SEND REQUEST')

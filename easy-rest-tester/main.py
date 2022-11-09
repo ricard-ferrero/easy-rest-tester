@@ -1,8 +1,7 @@
-import api
-import ui
+from ui import *
 
 def main():
-	pass
+	ui = UI()
 
 if __name__ == '__main__':
 	main()
