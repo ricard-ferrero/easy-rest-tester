@@ -1,7 +1,10 @@
-from ui import *
+from api import API
+from ui import UI
+
 
 def main():
-	ui = UI()
+	api = API()
+	ui = UI(api)
 
 if __name__ == '__main__':
 	main()

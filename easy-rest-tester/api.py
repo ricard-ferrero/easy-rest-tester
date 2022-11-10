@@ -36,13 +36,10 @@ class API():
 		self.json = json
 
 	def request(self, **kwargs):
-		if self.url=='':
-			return 'Error: URL doesn\'t exist.'
-
 		if self.method not in self.REQUESTS:
 			return 'Error: method requests incompatible.'
 
-		return self.REQUESTS[self.method](self.url, params=self.params, data=self.data, json=self.json, **kwargs)
+		if self.url=='':
+			return 'Error: URL doesn\'t exist.'
 
-	def cosadexa(self):
-		print('SEND REQUEST')
+		return self.REQUESTS[self.method](self.url, params=self.params, data=self.data, json=self.json, **kwargs)

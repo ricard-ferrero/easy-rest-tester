@@ -1,10 +1,13 @@
 from tkinter import *
-from tkinter import ttk
-from api import API
+from tkinter.ttk import *
 
-class UI(API):
 
-	def __init__(self):
+class UI():
+
+	def __init__(self, api):
+		self.api = api
+
+
 		# Window
 		self.root = Tk()
 		self.root.title('Easy REST Tester')
@@ -24,7 +27,7 @@ class UI(API):
 		Label(self.RequestFrame, text='URL').pack()
 		self.UrlEntry = Entry(self.RequestFrame, textvariable=self.url).pack()
 
-		self.button = Button(self.RequestFrame, text='Request', command=self.cosadexa).pack()
+		self.button = Button(self.RequestFrame, text='Request', command=self.send_request).pack()
 
 
 		# Response Frame -> all the data from the response.
@@ -32,7 +35,12 @@ class UI(API):
 		self.ResponseFrame.pack(side=RIGHT)
 		Label(self.ResponseFrame, text='Response').pack()
 
+		# Loop
+		self.root.mainloop()
 
-if __name__ == '__main__':
-	ui = UI()
-	ui.root.mainloop()
+
+	def send_request(self):
+		self.api.set_method(self.method.get())
+		self.api.set_url(self.url.get())
+		response = self.api.request()
+		print(response.headers)
