@@ -35,6 +35,11 @@ class UI():
 		self.ResponseFrame.pack(side=RIGHT)
 		Label(self.ResponseFrame, text='Response').pack()
 
+		self.ResponseText = Text(self.ResponseFrame)
+		self.ResponseText.pack()
+		self.ResponseText.insert('1.0', 'DFNAJDSBABDHAS')
+		self.ResponseText['state'] = 'disabled'
+
 		# Loop
 		self.root.mainloop()
 
