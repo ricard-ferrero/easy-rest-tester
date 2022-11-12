@@ -16,36 +16,70 @@ class UI():
 
 		# Request Frame -> all the request information.
 		self.RequestFrame = Frame(self.root)
-		self.RequestFrame.pack(side=LEFT)
-		Label(self.RequestFrame, text='Request').pack()
+		Label(self.RequestFrame, text='Request')
 
 		self.method = StringVar()
-		Label(self.RequestFrame, text='Method').pack()
-		self.MethodEntry = Entry(self.RequestFrame, textvariable=self.method).pack()
+		Label(self.RequestFrame, text='Method')
+		self.MethodEntry = Entry(self.RequestFrame, textvariable=self.method)
 
 		self.url = StringVar()
-		Label(self.RequestFrame, text='URL').pack()
-		self.UrlEntry = Entry(self.RequestFrame, textvariable=self.url).pack()
+		Label(self.RequestFrame, text='URL')
+		self.UrlEntry = Entry(self.RequestFrame, textvariable=self.url)
 
-		self.button = Button(self.RequestFrame, text='Request', command=self.send_request).pack()
+		self.button = Button(self.RequestFrame, text='Request', command=self.send_request)
 
 
 		# Response Frame -> all the data from the response.
 		self.ResponseFrame = Frame(self.root)
-		self.ResponseFrame.pack(side=RIGHT)
-		Label(self.ResponseFrame, text='Response').pack()
+		Label(self.ResponseFrame, text='Response').grid(column=0, row=0)
 
-		self.ResponseText = Text(self.ResponseFrame)
-		self.ResponseText.pack()
-		self.ResponseText.insert('1.0', 'DFNAJDSBABDHAS')
+		self.ResponseText = Text(self.ResponseFrame, wrap='none')
+		self.ResponseText.grid(column=0, row=1, sticky='nwes')
 		self.ResponseText['state'] = 'disabled'
+
+		#t = Text(root, width = 40, height = 5, wrap = "none")
+		self.ys = Scrollbar(self.ResponseFrame, orient = 'vertical', command = self.ResponseText.yview)
+		self.xs = Scrollbar(self.ResponseFrame, orient = 'horizontal', command = self.ResponseText.xview)
+		self.ResponseText['yscrollcommand'] = self.ys.set
+		self.ResponseText['xscrollcommand'] = self.xs.set
+
+		self.ys.grid(column = 1, row = 1, sticky = 'ns')
+		self.xs.grid(column = 0, row = 2, sticky = 'we')
+
+		self.RequestFrame.grid_columnconfigure(0, weight = 1)
+		self.RequestFrame.grid_rowconfigure(0, weight = 1)
+		
+
+		# PACK
+		self.pack_all()
 
 		# Loop
 		self.root.mainloop()
+
+
+	def pack_all(self):
+		self.RequestFrame.pack(side=LEFT)
+		self.ResponseFrame.pack(side=RIGHT)
+
+		for child in self.RequestFrame.winfo_children():
+			child.pack()
+
+		#for child in self.ResponseFrame.winfo_children():
+		#	child.pack()
 
 
 	def send_request(self):
 		self.api.set_method(self.method.get())
 		self.api.set_url(self.url.get())
 		response = self.api.request()
-		print(response.headers)
+		self.print_response(response)
+
+
+	def print_response(self, response):
+		self.ResponseText['state'] = 'normal'
+
+		if type(response) == str:
+			self.ResponseText.replace('1.0', 'end', response)
+		else:
+			self.ResponseText.replace('1.0', 'end', response.text)
+		self.ResponseText['state'] = 'disabled'

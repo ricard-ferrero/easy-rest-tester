@@ -39,7 +39,7 @@ class API():
 		if self.method not in self.REQUESTS:
 			return 'Error: method requests incompatible.'
 
-		if self.url=='':
+		try:
+			return self.REQUESTS[self.method](self.url, params=self.params, data=self.data, json=self.json, **kwargs)
+		except:
 			return 'Error: URL doesn\'t exist.'
-
-		return self.REQUESTS[self.method](self.url, params=self.params, data=self.data, json=self.json, **kwargs)
