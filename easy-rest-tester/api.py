@@ -20,6 +20,9 @@ class API():
 			'DELETE': requests.delete,
 		}
 
+	def get_methods(self):
+		return tuple(self.REQUESTS.keys())
+
 	def set_method(self, method):
 		self.method = method
 

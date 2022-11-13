@@ -18,13 +18,22 @@ class UI():
 		self.RequestFrame = Frame(self.root)
 		Label(self.RequestFrame, text='Request')
 
+		"""
 		self.method = StringVar()
 		Label(self.RequestFrame, text='Method')
 		self.MethodEntry = Entry(self.RequestFrame, textvariable=self.method)
+		"""
+
+		self.method = StringVar()
+		Label(self.RequestFrame, text='Method')
+		self.MethodInput = Combobox(self.RequestFrame, textvariable=self.method)
+		self.MethodInput['values'] = self.api.get_methods()
+		self.MethodInput.state(['readonly'])
+		self.MethodInput.current(0)
 
 		self.url = StringVar()
 		Label(self.RequestFrame, text='URL')
-		self.UrlEntry = Entry(self.RequestFrame, textvariable=self.url)
+		self.UrlInput = Entry(self.RequestFrame, textvariable=self.url)
 
 		self.button = Button(self.RequestFrame, text='Request', command=self.send_request)
 
