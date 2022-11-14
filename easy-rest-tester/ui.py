@@ -35,7 +35,7 @@ class UI():
 		Label(self.RequestFrame, text='URL')
 		self.UrlInput = Entry(self.RequestFrame, textvariable=self.url)
 
-		self.button = Button(self.RequestFrame, text='Request', command=self.send_request)
+		self.RequestButton = Button(self.RequestFrame, text='Request', command=self.send_request)
 
 
 		# Response Frame -> all the data from the response.
@@ -61,6 +61,9 @@ class UI():
 
 		# PACK
 		self.pack_all()
+
+		# 'Enter' key
+		self.UrlInput.bind("<Return>", lambda e: self.RequestButton.invoke())
 
 		# Loop
 		self.root.mainloop()
