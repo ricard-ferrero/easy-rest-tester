@@ -38,7 +38,7 @@ class API():
 	def set_json(self, json):
 		self.json = json
 
-	def request(self, **kwargs):
+	def get_response(self, **kwargs):
 		if self.method not in self.REQUESTS:
 			return 'Error: method requests incompatible.'
 
@@ -46,3 +46,15 @@ class API():
 			return self.REQUESTS[self.method](self.url, params=self.params, data=self.data, json=self.json, **kwargs)
 		except:
 			return 'Error: URL doesn\'t exist.'
+
+	def get_body_response(self):
+		res = self.get_response()
+		if type(res)==str:
+			return res
+		return res.text
+
+	def get_headers_response(self):
+		res = self.get_response()
+		if type(res)==str:
+			return res
+		return res.headers

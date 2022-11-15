@@ -16,7 +16,7 @@ class UI():
 
 		# Request Frame -> all the request information.
 		self.RequestFrame = Frame(self.root)
-		Label(self.RequestFrame, text='Request')
+		Label(self.RequestFrame, text='REQUEST')
 
 		"""
 		self.method = StringVar()
@@ -40,20 +40,45 @@ class UI():
 
 		# Response Frame -> all the data from the response.
 		self.ResponseFrame = Frame(self.root)
-		Label(self.ResponseFrame, text='Response').grid(column=0, row=0)
+		Label(self.ResponseFrame, text='RESPONSE').grid(column=0, row=0)
 
-		self.ResponseText = Text(self.ResponseFrame, wrap='none')
-		self.ResponseText.grid(column=0, row=1, sticky='nwes')
-		self.ResponseText['state'] = 'disabled'
+		self.NotebookResponse = Notebook(self.ResponseFrame)
+		self.NotebookResponse.grid(column=0, row=1)
 
-		#t = Text(root, width = 40, height = 5, wrap = "none")
-		self.ys = Scrollbar(self.ResponseFrame, orient = 'vertical', command = self.ResponseText.yview)
-		self.xs = Scrollbar(self.ResponseFrame, orient = 'horizontal', command = self.ResponseText.xview)
-		self.ResponseText['yscrollcommand'] = self.ys.set
-		self.ResponseText['xscrollcommand'] = self.xs.set
+		self.ResponseBodyFrame = Frame(self.NotebookResponse)
+		self.ResponseHeadersFrame = Frame(self.NotebookResponse)
 
-		self.ys.grid(column = 1, row = 1, sticky = 'ns')
-		self.xs.grid(column = 0, row = 2, sticky = 'we')
+		self.NotebookResponse.add(self.ResponseBodyFrame, text='Body')
+		self.NotebookResponse.add(self.ResponseHeadersFrame, text='Headers')
+
+			# Response Body
+		self.ResponseBodyText = Text(self.ResponseBodyFrame, wrap='none')
+		self.ResponseBodyText.grid(column=0, row=0, sticky='nwes')
+		self.ResponseBodyText['state'] = 'disabled'
+
+		self.ysbody = Scrollbar(self.ResponseBodyFrame, orient = 'vertical', command = self.ResponseBodyText.yview)
+		self.xsbody = Scrollbar(self.ResponseBodyFrame, orient = 'horizontal', command = self.ResponseBodyText.xview)
+		self.ResponseBodyText['yscrollcommand'] = self.ysbody.set
+		self.ResponseBodyText['xscrollcommand'] = self.xsbody.set
+
+		self.ysbody.grid(column = 1, row = 0, sticky = 'ns')
+		self.xsbody.grid(column = 0, row = 1, sticky = 'we')
+
+		self.RequestFrame.grid_columnconfigure(0, weight = 1)
+		self.RequestFrame.grid_rowconfigure(0, weight = 1)
+
+			#Response Headers
+		self.ResponseHeadersText = Text(self.ResponseHeadersFrame, wrap='none')
+		self.ResponseHeadersText.grid(column=0, row=0, sticky='nwes')
+		self.ResponseHeadersText['state'] = 'disabled'
+
+		self.ysheaders = Scrollbar(self.ResponseHeadersFrame, orient = 'vertical', command = self.ResponseHeadersText.yview)
+		self.xsheaders = Scrollbar(self.ResponseHeadersFrame, orient = 'horizontal', command = self.ResponseHeadersText.xview)
+		self.ResponseHeadersText['yscrollcommand'] = self.ysheaders.set
+		self.ResponseHeadersText['xscrollcommand'] = self.xsheaders.set
+
+		self.ysheaders.grid(column = 1, row = 0, sticky = 'ns')
+		self.xsheaders.grid(column = 0, row = 1, sticky = 'we')
 
 		self.RequestFrame.grid_columnconfigure(0, weight = 1)
 		self.RequestFrame.grid_rowconfigure(0, weight = 1)
@@ -83,15 +108,17 @@ class UI():
 	def send_request(self):
 		self.api.set_method(self.method.get())
 		self.api.set_url(self.url.get())
-		response = self.api.request()
-		self.print_response(response)
+		self.print_body_response(self.api.get_body_response())
+		self.print_headers_response(self.api.get_headers_response())
 
 
-	def print_response(self, response):
-		self.ResponseText['state'] = 'normal'
+	def print_body_response(self, response):
+		self.ResponseBodyText['state'] = 'normal'
+		self.ResponseBodyText.replace('1.0', 'end', response)
+		self.ResponseBodyText['state'] = 'disabled'
 
-		if type(response) == str:
-			self.ResponseText.replace('1.0', 'end', response)
-		else:
-			self.ResponseText.replace('1.0', 'end', response.text)
-		self.ResponseText['state'] = 'disabled'
+
+	def print_headers_response(self, response):
+		self.ResponseHeadersText['state'] = 'normal'
+		self.ResponseHeadersText.replace('1.0', 'end', response)
+		self.ResponseHeadersText['state'] = 'disabled'
