@@ -11,18 +11,12 @@ class UI():
 		# Window
 		self.root = Tk()
 		self.root.title('Easy REST Tester')
-		self.root.resizable(False, False)
+		#self.root.resizable(False, False)
 
 
 		# Request Frame -> all the request information.
 		self.RequestFrame = Frame(self.root)
 		Label(self.RequestFrame, text='REQUEST')
-
-		"""
-		self.method = StringVar()
-		Label(self.RequestFrame, text='Method')
-		self.MethodEntry = Entry(self.RequestFrame, textvariable=self.method)
-		"""
 
 		self.method = StringVar()
 		Label(self.RequestFrame, text='Method')
@@ -36,6 +30,17 @@ class UI():
 		self.UrlInput = Entry(self.RequestFrame, textvariable=self.url)
 
 		self.RequestButton = Button(self.RequestFrame, text='Request', command=self.send_request)
+
+		
+		self.NotebookRequest = Notebook(self.RequestFrame)
+
+		self.RequestParametersFrame = Frame(self.NotebookRequest)
+		self.RequestBodyFrame = Frame(self.NotebookRequest)
+		self.RequestHeadersFrame = Frame(self.NotebookRequest)
+
+		self.NotebookRequest.add(self.RequestParametersFrame, text='Parameters')
+		self.NotebookRequest.add(self.RequestBodyFrame, text='Body')
+		self.NotebookRequest.add(self.RequestHeadersFrame, text='Headers')
 
 
 		# Response Frame -> all the data from the response.
