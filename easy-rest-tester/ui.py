@@ -2,6 +2,25 @@ from tkinter import *
 from tkinter.ttk import *
 
 
+class ParametersInput():
+
+	def __init__(self, frame, row):
+		self.check = BooleanVar()
+		self.key = StringVar()
+		self.value = StringVar()
+		self.check_input = Checkbutton(frame, variable=self.check)
+		self.check_input.grid(column=0, row=row)
+		self.key_input = Entry(frame, textvariable=self.key)
+		self.key_input.grid(column=1, row=row)
+		self.value_input = Entry(frame, textvariable=self.value)
+		self.value_input.grid(column=2, row=row)
+
+
+	def get_parameters(self):
+		return (self.key.get(), self.value.get())
+
+
+
 class UI():
 
 	def __init__(self, api):
@@ -31,17 +50,22 @@ class UI():
 
 		self.RequestButton = Button(self.RequestFrame, text='Request', command=self.send_request)
 
-		
 		self.NotebookRequest = Notebook(self.RequestFrame)
 
 		self.RequestParametersFrame = Frame(self.NotebookRequest)
 		self.RequestBodyFrame = Frame(self.NotebookRequest)
-		self.RequestHeadersFrame = Frame(self.NotebookRequest)
+		#self.RequestHeadersFrame = Frame(self.NotebookRequest)
 
 		self.NotebookRequest.add(self.RequestParametersFrame, text='Parameters')
 		self.NotebookRequest.add(self.RequestBodyFrame, text='Body')
-		self.NotebookRequest.add(self.RequestHeadersFrame, text='Headers')
+		#self.NotebookRequest.add(self.RequestHeadersFrame, text='Headers')
 
+			# Request Parameters
+		self.ParametersList = [ParametersInput(self.RequestParametersFrame, 0),]
+			# Request Body
+		self.BodyList = [ParametersInput(self.RequestBodyFrame, 0),]
+			# Request Headers
+		#
 
 		# Response Frame -> all the data from the response.
 		self.ResponseFrame = Frame(self.root)
@@ -93,7 +117,7 @@ class UI():
 		self.pack_all()
 
 		# 'Enter' key
-		self.UrlInput.bind("<Return>", lambda e: self.RequestButton.invoke())
+		#self.UrlInput.bind("<Return>", lambda e: self.RequestButton.invoke())
 
 		# Loop
 		self.root.mainloop()
