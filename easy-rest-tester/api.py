@@ -20,6 +20,8 @@ class API():
 			'DELETE': requests.delete,
 		}
 
+		self.response = None
+
 	def get_methods(self):
 		return tuple(self.REQUESTS.keys())
 
@@ -29,7 +31,7 @@ class API():
 	def set_url(self, url):
 		self.url = url
 
-	def set_params(self, params):
+	def set_parameters(self, params):
 		self.params = params
 
 	def set_data(self, data):
@@ -37,6 +39,11 @@ class API():
 
 	def set_json(self, json):
 		self.json = json
+
+	
+	def send_request(self, **kwargs):
+		self.response = self.get_response(**kwargs)
+
 
 	def get_response(self, **kwargs):
 		if self.method not in self.REQUESTS:
@@ -48,13 +55,14 @@ class API():
 			return 'Error: URL doesn\'t exist.'
 
 	def get_body_response(self):
-		res = self.get_response()
-		if type(res)==str:
-			return res
-		return res.text
+		if type(self.response)==str:
+			return self.response
+		return self.response.text
 
 	def get_headers_response(self):
-		res = self.get_response()
-		if type(res)==str:
-			return res
-		return res.headers
+		if type(self.response)==str:
+			return self.response
+		return self.response.headers
+
+	def get_url(self):
+		return self.response.url

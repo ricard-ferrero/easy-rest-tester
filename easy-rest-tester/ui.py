@@ -19,6 +19,7 @@ class ParametersInput():
 	def get_parameters(self):
 		if self.check.get():
 			return (self.key.get(), self.value.get())
+		return None
 
 
 
@@ -136,10 +137,22 @@ class UI():
 
 
 	def send_request(self):
+		# Prepare the Request
 		self.api.set_method(self.method.get())
 		self.api.set_url(self.url.get())
+		
+		parameters = {}
+		for parameter in self.ParametersList:
+			values = parameter.get_parameters()
+			if values:
+				parameters[values[0]] = values[1]
+		self.api.set_parameters(parameters)
+
+		# Send the Request and catch the response
+		self.api.send_request()
 		self.print_body_response(self.api.get_body_response())
 		self.print_headers_response(self.api.get_headers_response())
+		self.url.set(self.api.get_url())
 
 
 	def print_body_response(self, response):
