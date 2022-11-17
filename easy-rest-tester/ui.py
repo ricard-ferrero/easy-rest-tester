@@ -8,7 +8,7 @@ class ParametersInput():
 		self.check = BooleanVar()
 		self.key = StringVar()
 		self.value = StringVar()
-		self.check_input = Checkbutton(frame, variable=self.check)
+		self.check_input = Checkbutton(frame, variable=self.check, onvalue=True, offvalue=False)
 		self.check_input.grid(column=0, row=row)
 		self.key_input = Entry(frame, textvariable=self.key)
 		self.key_input.grid(column=1, row=row)
@@ -17,7 +17,8 @@ class ParametersInput():
 
 
 	def get_parameters(self):
-		return (self.key.get(), self.value.get())
+		if self.check.get():
+			return (self.key.get(), self.value.get())
 
 
 
