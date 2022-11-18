@@ -148,6 +148,13 @@ class UI():
 				parameters[values[0]] = values[1]
 		self.api.set_parameters(parameters)
 
+		data = {}
+		for body_data in self.BodyList:
+			values = body_data.get_parameters()
+			if values:
+				data[values[0]] = values[1]
+		self.api.set_data(data)
+
 		# Send the Request and catch the response
 		self.api.send_request()
 		self.print_body_response(self.api.get_body_response())
