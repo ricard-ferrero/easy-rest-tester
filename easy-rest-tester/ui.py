@@ -35,7 +35,7 @@ class UI():
 		#self.root.resizable(False, False)
 
 
-		# Request Frame -> all the request information.
+		# REQUEST FRAME -> all the request information.
 		self.RequestFrame = Frame(self.root)
 		Label(self.RequestFrame, text='REQUEST')
 
@@ -63,13 +63,31 @@ class UI():
 		#self.NotebookRequest.add(self.RequestHeadersFrame, text='Headers')
 
 			# Request Parameters
-		self.ParametersList = [ParametersInput(self.RequestParametersFrame, 0),]
+		self.ParametersInputsFrame = Frame(self.RequestParametersFrame)
+		self.ParametersInputsFrame.pack()
+		self.ParametersButtonFrame = Frame(self.RequestParametersFrame)
+		self.ParametersButtonFrame.pack()
+
+		self.ParametersList = [ParametersInput(self.ParametersInputsFrame, 0),]
+
+		self.AddParametersButton = Button(self.ParametersButtonFrame, text='+ Add', command=self.add_parameters_input)
+		self.AddParametersButton.pack()
+			
 			# Request Body
-		self.BodyList = [ParametersInput(self.RequestBodyFrame, 0),]
+		self.BodyInputsFrame = Frame(self.RequestBodyFrame)
+		self.BodyInputsFrame.pack()
+		self.BodyButtonFrame = Frame(self.RequestBodyFrame)
+		self.BodyButtonFrame.pack()
+
+		self.BodyList = [ParametersInput(self.BodyInputsFrame, 0),]
+		
+		self.AddBodyButton = Button(self.BodyButtonFrame, text='+ Add', command=self.add_body_input)
+		self.AddBodyButton.pack()
+
 			# Request Headers
 		#
 
-		# Response Frame -> all the data from the response.
+		# RESPONSE FRAME -> all the data from the response.
 		self.ResponseFrame = Frame(self.root)
 		Label(self.ResponseFrame, text='RESPONSE').grid(column=0, row=0)
 
@@ -134,6 +152,14 @@ class UI():
 
 		#for child in self.ResponseFrame.winfo_children():
 		#	child.pack()
+
+
+	def add_parameters_input(self):
+		self.ParametersList.append(ParametersInput(self.ParametersInputsFrame, len(self.ParametersList)))
+
+
+	def add_body_input(self):
+		self.BodyList.append(ParametersInput(self.BodyInputsFrame, len(self.BodyList)))
 
 
 	def send_request(self):
