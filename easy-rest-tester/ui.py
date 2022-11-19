@@ -22,7 +22,6 @@ class ParametersInput():
 		return None
 
 
-
 class UI():
 
 	def __init__(self, api):
@@ -32,7 +31,8 @@ class UI():
 		# Window
 		self.root = Tk()
 		self.root.title('Easy REST Tester')
-		#self.root.resizable(False, False)
+		self.root.columnconfigure(0, weight=1)
+		self.root.rowconfigure(0, weight=1)
 
 
 		# REQUEST FRAME -> all the request information.
@@ -136,16 +136,18 @@ class UI():
 		# PACK
 		self.pack_all()
 
+
 		# 'Enter' key
 		#self.UrlInput.bind("<Return>", lambda e: self.RequestButton.invoke())
+
 
 		# Loop
 		self.root.mainloop()
 
 
 	def pack_all(self):
-		self.RequestFrame.pack(side=LEFT)
-		self.ResponseFrame.pack(side=RIGHT)
+		self.RequestFrame.grid(column=0, row=0)
+		self.ResponseFrame.grid(column=1, row=0)
 
 		for child in self.RequestFrame.winfo_children():
 			child.pack()
