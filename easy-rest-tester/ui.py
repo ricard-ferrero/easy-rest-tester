@@ -28,30 +28,32 @@ class UI():
 		self.api = api
 
 
-		# Window
+		# WINDOW
 		self.root = Tk()
 		self.root.title('Easy REST Tester')
-		self.root.columnconfigure(0, weight=1)
-		self.root.rowconfigure(0, weight=1)
 
 
 		# REQUEST FRAME -> all the request information.
+			# Title
 		self.RequestFrame = Frame(self.root)
 		Label(self.RequestFrame, text='REQUEST')
 
+			# Basic Inputs
+		self.BasicInputsFrame = Frame(self.RequestFrame)
 		self.method = StringVar()
-		Label(self.RequestFrame, text='Method')
-		self.MethodInput = Combobox(self.RequestFrame, textvariable=self.method)
+		self.MethodLabel = Label(self.BasicInputsFrame, text='Method')
+		self.MethodInput = Combobox(self.BasicInputsFrame, textvariable=self.method, width=7)
 		self.MethodInput['values'] = self.api.get_methods()
 		self.MethodInput.state(['readonly'])
 		self.MethodInput.current(0)
 
 		self.url = StringVar()
-		Label(self.RequestFrame, text='URL')
-		self.UrlInput = Entry(self.RequestFrame, textvariable=self.url)
+		self.UrlLabel = Label(self.BasicInputsFrame, text='URL')
+		self.UrlInput = Entry(self.BasicInputsFrame, textvariable=self.url, width=40)
 
-		self.RequestButton = Button(self.RequestFrame, text='Request', command=self.send_request)
+		self.RequestButton = Button(self.BasicInputsFrame, text='Request', command=self.send_request)
 
+			# Data Inputs
 		self.NotebookRequest = Notebook(self.RequestFrame)
 
 		self.RequestParametersFrame = Frame(self.NotebookRequest)
@@ -62,7 +64,7 @@ class UI():
 		self.NotebookRequest.add(self.RequestBodyFrame, text='Body')
 		#self.NotebookRequest.add(self.RequestHeadersFrame, text='Headers')
 
-			# Request Parameters
+				# Request Parameters
 		self.ParametersInputsFrame = Frame(self.RequestParametersFrame)
 		self.ParametersInputsFrame.pack()
 		self.ParametersButtonFrame = Frame(self.RequestParametersFrame)
@@ -73,7 +75,7 @@ class UI():
 		self.AddParametersButton = Button(self.ParametersButtonFrame, text='+ Add', command=self.add_parameters_input)
 		self.AddParametersButton.pack()
 			
-			# Request Body
+				# Request Body
 		self.BodyInputsFrame = Frame(self.RequestBodyFrame)
 		self.BodyInputsFrame.pack()
 		self.BodyButtonFrame = Frame(self.RequestBodyFrame)
@@ -84,7 +86,7 @@ class UI():
 		self.AddBodyButton = Button(self.BodyButtonFrame, text='+ Add', command=self.add_body_input)
 		self.AddBodyButton.pack()
 
-			# Request Headers
+				# Request Headers
 		#
 
 		# RESPONSE FRAME -> all the data from the response.
@@ -116,7 +118,7 @@ class UI():
 		self.RequestFrame.grid_columnconfigure(0, weight = 1)
 		self.RequestFrame.grid_rowconfigure(0, weight = 1)
 
-			#Response Headers
+			# Response Headers
 		self.ResponseHeadersText = Text(self.ResponseHeadersFrame, wrap='none')
 		self.ResponseHeadersText.grid(column=0, row=0, sticky='nwes')
 		self.ResponseHeadersText['state'] = 'disabled'
@@ -133,8 +135,8 @@ class UI():
 		self.RequestFrame.grid_rowconfigure(0, weight = 1)
 		
 
-		# PACK
-		self.pack_all()
+		# PLACE ALL WIDGETS
+		self.geometry()
 
 
 		# 'Enter' key
@@ -145,15 +147,39 @@ class UI():
 		self.root.mainloop()
 
 
-	def pack_all(self):
-		self.RequestFrame.grid(column=0, row=0)
-		self.ResponseFrame.grid(column=1, row=0)
+	def geometry(self):
+		"""
+		To place all widgets in a structure
+		"""
+		# Prepare the root's grid
+		self.root.columnconfigure(0, weight=1)
+		self.root.columnconfigure(1, weight=1)
+		self.root.rowconfigure(0, weight=1)
 
-		for child in self.RequestFrame.winfo_children():
+			# Two Basic Frames (direct childrens from 'root')
+		self.RequestFrame.grid(column=0, row=0, sticky=NS)
+		self.ResponseFrame.grid(column=1, row=0, sticky=NS)
+
+		# All Request widgets
+		self.pack_in(self.RequestFrame) # 3 childs: title, frame, notebook
+		self.BasicInputsFrame.columnconfigure(0, weight=1)
+		self.BasicInputsFrame.columnconfigure(1, weight=3)
+		self.BasicInputsFrame.rowconfigure(0, weight=1)
+		self.BasicInputsFrame.rowconfigure(1, weight=1)
+		self.BasicInputsFrame.rowconfigure(2, weight=1)
+		self.MethodLabel.grid(column=0, row=0, sticky=W)
+		self.UrlLabel.grid(column=1, row=0, sticky=W)
+		self.MethodInput.grid(column=0, row=1)
+		self.UrlInput.grid(column=1, row=1)
+		self.RequestButton.grid(column=0, row=2, columnspan=3)
+
+
+	def pack_in(self, frame):
+		"""
+		To place the widgets inside the 'frame' using .pack()
+		"""
+		for child in frame.winfo_children():
 			child.pack()
-
-		#for child in self.ResponseFrame.winfo_children():
-		#	child.pack()
 
 
 	def add_parameters_input(self):
