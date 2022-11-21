@@ -1,19 +1,23 @@
 from tkinter import *
 from tkinter.ttk import *
 
+BIG_PAD=10
+SMALL_PAD=5
 
 class ParametersInput():
 
 	def __init__(self, frame, row):
+		PAD = 3
 		self.check = BooleanVar()
 		self.key = StringVar()
 		self.value = StringVar()
+
 		self.check_input = Checkbutton(frame, variable=self.check, onvalue=True, offvalue=False)
-		self.check_input.grid(column=0, row=row)
+		self.check_input.grid(column=0, row=row, padx=PAD, pady=PAD)
 		self.key_input = Entry(frame, textvariable=self.key)
-		self.key_input.grid(column=1, row=row)
+		self.key_input.grid(column=1, row=row, padx=PAD, pady=PAD)
 		self.value_input = Entry(frame, textvariable=self.value)
-		self.value_input.grid(column=2, row=row)
+		self.value_input.grid(column=2, row=row, padx=PAD, pady=PAD)
 
 
 	def get_parameters(self):
@@ -31,6 +35,7 @@ class UI():
 		# WINDOW
 		self.root = Tk()
 		self.root.title('Easy REST Tester')
+		self.root.resizable(False,False)
 
 
 		# REQUEST FRAME -> all the request information.
@@ -66,81 +71,52 @@ class UI():
 
 				# Request Parameters
 		self.ParametersInputsFrame = Frame(self.RequestParametersFrame)
-		self.ParametersInputsFrame.pack()
 		self.ParametersButtonFrame = Frame(self.RequestParametersFrame)
-		self.ParametersButtonFrame.pack()
 
 		self.ParametersList = [ParametersInput(self.ParametersInputsFrame, 0),]
 
 		self.AddParametersButton = Button(self.ParametersButtonFrame, text='+ Add', command=self.add_parameters_input)
-		self.AddParametersButton.pack()
 			
 				# Request Body
 		self.BodyInputsFrame = Frame(self.RequestBodyFrame)
-		self.BodyInputsFrame.pack()
 		self.BodyButtonFrame = Frame(self.RequestBodyFrame)
-		self.BodyButtonFrame.pack()
 
 		self.BodyList = [ParametersInput(self.BodyInputsFrame, 0),]
 		
 		self.AddBodyButton = Button(self.BodyButtonFrame, text='+ Add', command=self.add_body_input)
-		self.AddBodyButton.pack()
 
 				# Request Headers
 		#
 
 		# RESPONSE FRAME -> all the data from the response.
 		self.ResponseFrame = Frame(self.root)
-		Label(self.ResponseFrame, text='RESPONSE').grid(column=0, row=0)
+		self.ResponseLabel = Label(self.ResponseFrame, text='RESPONSE')
 
 		self.NotebookResponse = Notebook(self.ResponseFrame)
-		self.NotebookResponse.grid(column=0, row=1)
-
 		self.ResponseBodyFrame = Frame(self.NotebookResponse)
 		self.ResponseHeadersFrame = Frame(self.NotebookResponse)
-
 		self.NotebookResponse.add(self.ResponseBodyFrame, text='Body')
 		self.NotebookResponse.add(self.ResponseHeadersFrame, text='Headers')
 
 			# Response Body
 		self.ResponseBodyText = Text(self.ResponseBodyFrame, wrap='none')
-		self.ResponseBodyText.grid(column=0, row=0, sticky='nwes')
-		self.ResponseBodyText['state'] = 'disabled'
 
 		self.ysbody = Scrollbar(self.ResponseBodyFrame, orient = 'vertical', command = self.ResponseBodyText.yview)
 		self.xsbody = Scrollbar(self.ResponseBodyFrame, orient = 'horizontal', command = self.ResponseBodyText.xview)
 		self.ResponseBodyText['yscrollcommand'] = self.ysbody.set
 		self.ResponseBodyText['xscrollcommand'] = self.xsbody.set
 
-		self.ysbody.grid(column = 1, row = 0, sticky = 'ns')
-		self.xsbody.grid(column = 0, row = 1, sticky = 'we')
-
-		self.RequestFrame.grid_columnconfigure(0, weight = 1)
-		self.RequestFrame.grid_rowconfigure(0, weight = 1)
-
 			# Response Headers
 		self.ResponseHeadersText = Text(self.ResponseHeadersFrame, wrap='none')
-		self.ResponseHeadersText.grid(column=0, row=0, sticky='nwes')
-		self.ResponseHeadersText['state'] = 'disabled'
 
 		self.ysheaders = Scrollbar(self.ResponseHeadersFrame, orient = 'vertical', command = self.ResponseHeadersText.yview)
 		self.xsheaders = Scrollbar(self.ResponseHeadersFrame, orient = 'horizontal', command = self.ResponseHeadersText.xview)
 		self.ResponseHeadersText['yscrollcommand'] = self.ysheaders.set
 		self.ResponseHeadersText['xscrollcommand'] = self.xsheaders.set
 
-		self.ysheaders.grid(column = 1, row = 0, sticky = 'ns')
-		self.xsheaders.grid(column = 0, row = 1, sticky = 'we')
-
-		self.RequestFrame.grid_columnconfigure(0, weight = 1)
-		self.RequestFrame.grid_rowconfigure(0, weight = 1)
-		
 
 		# PLACE ALL WIDGETS
 		self.geometry()
-
-
-		# 'Enter' key
-		#self.UrlInput.bind("<Return>", lambda e: self.RequestButton.invoke())
 
 
 		# Loop
@@ -156,22 +132,35 @@ class UI():
 		self.root.columnconfigure(1, weight=1)
 		self.root.rowconfigure(0, weight=1)
 
-			# Two Basic Frames (direct childrens from 'root')
-		self.RequestFrame.grid(column=0, row=0, sticky=NS)
-		self.ResponseFrame.grid(column=1, row=0, sticky=NS)
-
 		# All Request widgets
+		self.RequestFrame.grid(column=0, row=0, sticky=NS, padx=BIG_PAD, pady=BIG_PAD)
 		self.pack_in(self.RequestFrame) # 3 childs: title, frame, notebook
+		self.NotebookRequest.pack_configure(fill=BOTH, expand=True)
 		self.BasicInputsFrame.columnconfigure(0, weight=1)
 		self.BasicInputsFrame.columnconfigure(1, weight=3)
 		self.BasicInputsFrame.rowconfigure(0, weight=1)
 		self.BasicInputsFrame.rowconfigure(1, weight=1)
 		self.BasicInputsFrame.rowconfigure(2, weight=1)
-		self.MethodLabel.grid(column=0, row=0, sticky=W)
-		self.UrlLabel.grid(column=1, row=0, sticky=W)
-		self.MethodInput.grid(column=0, row=1)
-		self.UrlInput.grid(column=1, row=1)
-		self.RequestButton.grid(column=0, row=2, columnspan=3)
+		self.MethodLabel.grid(column=0, row=0, sticky=W, padx=SMALL_PAD)
+		self.UrlLabel.grid(column=1, row=0, sticky=W, padx=SMALL_PAD)
+		self.MethodInput.grid(column=0, row=1, padx=SMALL_PAD)
+		self.UrlInput.grid(column=1, row=1, padx=SMALL_PAD)
+		self.RequestButton.grid(column=0, row=2, columnspan=3, padx=SMALL_PAD, pady=SMALL_PAD)
+		self.pack_in(self.RequestParametersFrame)
+		self.AddParametersButton.pack()
+		self.pack_in(self.RequestBodyFrame)
+		self.AddBodyButton.pack()
+
+		# All Response widgets
+		self.ResponseFrame.grid(column=1, row=0, sticky=NS, padx=BIG_PAD, pady=BIG_PAD)
+		self.pack_in(self.ResponseFrame) # 2 childs: title, notebook
+		self.NotebookResponse.pack_configure(fill=Y, expand=True)
+		self.ResponseBodyText.grid(column=0, row=0, sticky='nwes')
+		self.ysbody.grid(column = 1, row = 0, sticky = 'ns')
+		self.xsbody.grid(column = 0, row = 1, sticky = 'we')
+		self.ResponseHeadersText.grid(column=0, row=0, sticky='nwes')
+		self.ysheaders.grid(column = 1, row = 0, sticky = 'ns')
+		self.xsheaders.grid(column = 0, row = 1, sticky = 'we')
 
 
 	def pack_in(self, frame):
@@ -179,7 +168,7 @@ class UI():
 		To place the widgets inside the 'frame' using .pack()
 		"""
 		for child in frame.winfo_children():
-			child.pack()
+			child.pack(padx=BIG_PAD, pady=BIG_PAD)
 
 
 	def add_parameters_input(self):
